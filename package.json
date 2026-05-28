@@ -1,0 +1,30 @@
+{
+  "name": "adanos-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for Adanos Market Sentiment API",
+  "main": "dist/index.js",
+  "bin": {
+    "adanos-mcp": "dist/index.js"
+  },
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx --env-file=.env src/index.ts",
+    "inspect": "npx @modelcontextprotocol/inspector tsx --env-file=.env src/index.ts",
+    "start": "node dist/index.js",
+    "prepare": "npm run build"
+  },
+  "keywords": ["mcp", "sentiment", "stocks", "finance"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "finance-sentiment": "^2.4.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3"
+  }
+}
