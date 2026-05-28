@@ -35,18 +35,22 @@ function toText(data: unknown): string {
   return JSON.stringify(data, null, 2);
 }
 
-server.tool(
+server.registerTool(
   "get_trending",
-  "Get stocks or crypto tokens currently trending by buzz score on a given data source.",
   {
-    source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
-    limit: z.number().int().min(1).max(100).optional().describe("Max results (1-100, default 20)"),
-    from: z.string().optional().describe("Start date YYYY-MM-DD"),
-    to: z.string().optional().describe("End date YYYY-MM-DD"),
-    type: z
-      .enum(["stock", "etf", "all"])
-      .optional()
-      .describe('Filter asset type: "stock", "etf", or "all". Not applicable for crypto source.'),
+    title: "Get Trending Stocks or Crypto",
+    description:
+      "Get stocks or crypto tokens currently trending by buzz score on a given data source.",
+    inputSchema: {
+      source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
+      limit: z.number().int().min(1).max(100).optional().describe("Max results (1-100, default 20)"),
+      from: z.string().optional().describe("Start date YYYY-MM-DD"),
+      to: z.string().optional().describe("End date YYYY-MM-DD"),
+      type: z
+        .enum(["stock", "etf", "all"])
+        .optional()
+        .describe('Filter asset type: "stock", "etf", or "all". Not applicable for crypto.'),
+    },
   },
   async ({ source, limit, from, to, type }) => {
     const ns = getNamespace(source);
@@ -57,16 +61,20 @@ server.tool(
   }
 );
 
-server.tool(
+server.registerTool(
   "get_stock_sentiment",
-  "Get detailed sentiment data (buzz score, trend, bullish/bearish %, daily breakdown) for a specific stock ticker or crypto token.",
   {
-    source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
-    ticker: z
-      .string()
-      .describe("Stock ticker symbol (e.g. TSLA, AAPL) or crypto symbol (e.g. BTC, ETH)"),
-    from: z.string().optional().describe("Start date YYYY-MM-DD"),
-    to: z.string().optional().describe("End date YYYY-MM-DD"),
+    title: "Get Stock or Crypto Sentiment",
+    description:
+      "Get detailed sentiment data (buzz score, trend, bullish/bearish %, daily breakdown) for a specific stock ticker or crypto token.",
+    inputSchema: {
+      source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
+      ticker: z
+        .string()
+        .describe("Stock ticker (e.g. TSLA, AAPL) or crypto symbol (e.g. BTC, ETH)"),
+      from: z.string().optional().describe("Start date YYYY-MM-DD"),
+      to: z.string().optional().describe("End date YYYY-MM-DD"),
+    },
   },
   async ({ source, ticker, from, to }) => {
     const ns = getNamespace(source);
@@ -78,12 +86,16 @@ server.tool(
   }
 );
 
-server.tool(
+server.registerTool(
   "explain_stock",
-  "Get an AI-generated natural language explanation of why a stock or crypto token is currently trending.",
   {
-    source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
-    ticker: z.string().describe("Stock ticker or crypto symbol"),
+    title: "Explain Why a Stock is Trending",
+    description:
+      "Get an AI-generated natural language explanation of why a stock or crypto token is currently trending.",
+    inputSchema: {
+      source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
+      ticker: z.string().describe("Stock ticker or crypto symbol"),
+    },
   },
   async ({ source, ticker }) => {
     const ns = getNamespace(source);
@@ -92,13 +104,17 @@ server.tool(
   }
 );
 
-server.tool(
+server.registerTool(
   "search_stocks",
-  "Search for stocks or crypto tokens by ticker symbol or company/project name.",
   {
-    source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
-    query: z.string().describe("Search query: ticker symbol or company name"),
-    limit: z.number().int().min(1).max(200).optional().describe("Max results (1-200, default 50)"),
+    title: "Search Stocks or Crypto",
+    description:
+      "Search for stocks or crypto tokens by ticker symbol or company/project name.",
+    inputSchema: {
+      source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
+      query: z.string().describe("Search query: ticker symbol or company name"),
+      limit: z.number().int().min(1).max(200).optional().describe("Max results (1-200, default 50)"),
+    },
   },
   async ({ source, query, limit }) => {
     const ns = getNamespace(source);
@@ -107,18 +123,22 @@ server.tool(
   }
 );
 
-server.tool(
+server.registerTool(
   "compare_stocks",
-  "Compare sentiment metrics (buzz score, sentiment, trend) for 2-10 stocks or crypto tokens side by side.",
   {
-    source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
-    tickers: z
-      .array(z.string())
-      .min(2)
-      .max(10)
-      .describe("List of ticker symbols or crypto symbols to compare (2-10 items)"),
-    from: z.string().optional().describe("Start date YYYY-MM-DD"),
-    to: z.string().optional().describe("End date YYYY-MM-DD"),
+    title: "Compare Stock or Crypto Sentiment",
+    description:
+      "Compare sentiment metrics (buzz score, sentiment, trend) for 2-10 stocks or crypto tokens side by side.",
+    inputSchema: {
+      source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
+      tickers: z
+        .array(z.string())
+        .min(2)
+        .max(10)
+        .describe("List of ticker symbols to compare (2-10 items)"),
+      from: z.string().optional().describe("Start date YYYY-MM-DD"),
+      to: z.string().optional().describe("End date YYYY-MM-DD"),
+    },
   },
   async ({ source, tickers, from, to }) => {
     const ns = getNamespace(source);
@@ -127,13 +147,17 @@ server.tool(
   }
 );
 
-server.tool(
+server.registerTool(
   "get_market_sentiment",
-  "Get an aggregate snapshot of the overall market mood (total mentions, top drivers, bullish/bearish ratio) from a given data source.",
   {
-    source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
-    from: z.string().optional().describe("Start date YYYY-MM-DD"),
-    to: z.string().optional().describe("End date YYYY-MM-DD"),
+    title: "Get Overall Market Sentiment",
+    description:
+      "Get an aggregate snapshot of the overall market mood (total mentions, top drivers, bullish/bearish ratio) from a given data source.",
+    inputSchema: {
+      source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
+      from: z.string().optional().describe("Start date YYYY-MM-DD"),
+      to: z.string().optional().describe("End date YYYY-MM-DD"),
+    },
   },
   async ({ source, from, to }) => {
     const ns = getNamespace(source);
@@ -142,21 +166,19 @@ server.tool(
   }
 );
 
-server.tool(
+server.registerTool(
   "get_stock_mentions",
-  "Get raw mention-level data (individual posts, tweets, or articles) for a specific stock. Requires Professional plan.",
   {
-    source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
-    ticker: z.string().describe("Stock ticker or crypto symbol"),
-    limit: z
-      .number()
-      .int()
-      .min(1)
-      .max(100)
-      .optional()
-      .describe("Max results (1-100, default 50)"),
-    from: z.string().optional().describe("Start date YYYY-MM-DD"),
-    to: z.string().optional().describe("End date YYYY-MM-DD"),
+    title: "Get Raw Stock Mentions",
+    description:
+      "Get raw mention-level data (individual posts, tweets, or articles) for a specific stock. Requires Professional plan.",
+    inputSchema: {
+      source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
+      ticker: z.string().describe("Stock ticker or crypto symbol"),
+      limit: z.number().int().min(1).max(100).optional().describe("Max results (1-100, default 50)"),
+      from: z.string().optional().describe("Start date YYYY-MM-DD"),
+      to: z.string().optional().describe("End date YYYY-MM-DD"),
+    },
   },
   async ({ source, ticker, limit, from, to }) => {
     const ns = getNamespace(source);
@@ -165,11 +187,15 @@ server.tool(
   }
 );
 
-server.tool(
+server.registerTool(
   "get_stats",
-  "Get dataset statistics for a data source: total tracked tickers, update frequency, coverage details.",
   {
-    source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
+    title: "Get Data Source Statistics",
+    description:
+      "Get dataset statistics for a data source: total tracked tickers, update frequency, coverage details.",
+    inputSchema: {
+      source: z.enum(SOURCE_ENUM).describe(SOURCE_DESC),
+    },
   },
   async ({ source }) => {
     const ns = getNamespace(source);

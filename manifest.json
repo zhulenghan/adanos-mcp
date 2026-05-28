@@ -1,0 +1,51 @@
+{
+  "manifest_version": "0.4",
+  "name": "adanos-mcp",
+  "display_name": "Adanos Market Sentiment",
+  "version": "1.0.0",
+  "description": "Real-time market sentiment from Reddit, X/Twitter, financial news, Polymarket, and crypto communities.",
+  "long_description": "Query buzz scores, sentiment trends, and mention data for any stock or crypto token across 5 data sources: Reddit stocks, X/Twitter FinTwit, financial news, Polymarket prediction markets, and Reddit crypto.",
+  "author": {
+    "name": "zhulenghan",
+    "url": "https://github.com/zhulenghan/adanos-mcp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhulenghan/adanos-mcp"
+  },
+  "keywords": ["finance", "stocks", "crypto", "sentiment", "reddit", "twitter"],
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/dist/index.js"],
+      "env": {
+        "ADANOS_API_KEY": "${user_config.api_key}"
+      }
+    }
+  },
+  "user_config": {
+    "api_key": {
+      "type": "string",
+      "title": "Adanos API Key",
+      "description": "Your Adanos API key. Get one free at https://adanos.org",
+      "required": true,
+      "sensitive": true
+    }
+  },
+  "tools": [
+    { "name": "get_trending", "title": "Get Trending Stocks or Crypto", "description": "Get trending stocks or crypto tokens by buzz score" },
+    { "name": "get_stock_sentiment", "title": "Get Stock or Crypto Sentiment", "description": "Get detailed sentiment data for a specific ticker" },
+    { "name": "explain_stock", "title": "Explain Why a Stock is Trending", "description": "AI explanation of why a stock is trending" },
+    { "name": "search_stocks", "title": "Search Stocks or Crypto", "description": "Search stocks or crypto by ticker or name" },
+    { "name": "compare_stocks", "title": "Compare Stock or Crypto Sentiment", "description": "Compare sentiment for 2-10 tickers side by side" },
+    { "name": "get_market_sentiment", "title": "Get Overall Market Sentiment", "description": "Overall market sentiment snapshot" },
+    { "name": "get_stock_mentions", "title": "Get Raw Stock Mentions", "description": "Raw mention-level data (Pro plan)" },
+    { "name": "get_stats", "title": "Get Data Source Statistics", "description": "Dataset statistics for a data source" }
+  ],
+  "compatibility": {
+    "claude_desktop": ">=0.10.0",
+    "platforms": ["darwin", "win32", "linux"]
+  }
+}
